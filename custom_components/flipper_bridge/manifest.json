@@ -1,0 +1,11 @@
+{
+  "domain": "flipper_bridge",
+  "name": "Flipper Bridge",
+  "version": "0.1.0",
+  "documentation": "https://github.com/markszabo/home-assistant-flipper-bridge",
+  "issue_tracker": "https://github.com/markszabo/home-assistant-flipper-bridge/issues",
+  "codeowners": ["@markszabo"],
+  "config_flow": true,
+  "requirements": [],
+  "iot_class": "local_push"
+}
