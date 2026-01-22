@@ -1,6 +1,7 @@
 import logging
 from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.config_entries import ConfigEntry
+import voluptuous as vol
 
 from .const import (
     DOMAIN,
@@ -37,9 +38,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         DOMAIN,
         SERVICE_SEND_CLI,
         handle_send_cli,
-        schema={
-            ATTR_COMMAND: str,
-        },
+        schema=vol.Schema(
+            {
+                vol.Required(ATTR_COMMAND): str,
+            }
+        ),
         supports_response=True,
     )
 
