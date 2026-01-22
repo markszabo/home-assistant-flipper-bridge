@@ -18,12 +18,33 @@ class FlipperSerialClient:
             return
 
         _LOGGER.info("Opening Flipper serial connection on %s", self._port)
+
         self._ser = serial.Serial(
             self._port,
-            self._baudrate,
+            baudrate=115200,
             timeout=0.5,
+            write_timeout=1,
         )
-        time.sleep(0.2)  # Flipper needs a moment
+
+        # === Flipper CLI wake-up sequence ===
+        time.sleep(0.5)
+
+        # Send newline to wake CLI
+        self._ser.write(b"\n")
+        self._ser.flush()
+        time.sleep(0.2)
+
+        # Try Ctrl+C to break into CLI if needed
+        self._ser.write(b"\x03")
+        self._ser.flush()
+        time.sleep(0.2)
+
+        # Clear any startup noise
+        self._ser.reset_input_buffer()
+        self._ser.reset_output_buffer()
+
+        _LOGGER.debug("Flipper CLI initialization sequence complete")
+
 
     def close(self):
         if self._ser:
