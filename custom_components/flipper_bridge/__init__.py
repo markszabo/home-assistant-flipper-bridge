@@ -32,7 +32,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             client.send_command, command
         )
 
-        return {ATTR_RESPONSE: response}
+        return {ATTR_RESPONSE: response or ""}
 
     hass.services.async_register(
         DOMAIN,

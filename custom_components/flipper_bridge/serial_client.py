@@ -34,22 +34,44 @@ class FlipperSerialClient:
         with self._lock:
             self.connect()
 
+            # Clear any old data
+            self._ser.reset_input_buffer()
+            self._ser.reset_output_buffer()
+
             cmd = command.strip() + "\n"
             _LOGGER.debug("Sending CLI command: %s", cmd.strip())
             self._ser.write(cmd.encode())
+            self._ser.flush()
 
             response_lines = []
             start = time.monotonic()
+            got_anything = False
 
-            while time.monotonic() - start < 1.5:
-                line = self._ser.readline()
-                if not line:
-                    break
-                decoded = line.decode(errors="ignore").rstrip()
-                response_lines.append(decoded)
+            # Wait up to 3 seconds total
+            while time.monotonic() - start < 3.0:
+                if self._ser.in_waiting > 0:
+                    line = self._ser.readline()
+                    if line:
+                        got_anything = True
+                        decoded = line.decode(errors="ignore").rstrip()
+                        response_lines.append(decoded)
+                        continue
+
+                # If we already got some data, allow a short grace period
+                if got_anything:
+                    time.sleep(0.1)
+                else:
+                    time.sleep(0.2)
 
             response = "\n".join(response_lines)
-            if response:
+
+            if not response:
+                _LOGGER.warning(
+                    "No response received from Flipper for command: %s",
+                    command,
+                )
+            else:
                 _LOGGER.info("Flipper response:\n%s", response)
 
             return response
+
