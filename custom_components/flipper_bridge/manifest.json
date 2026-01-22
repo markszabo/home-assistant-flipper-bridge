@@ -1,7 +1,7 @@
 {
   "domain": "flipper_bridge",
   "name": "Flipper Bridge",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "documentation": "https://github.com/markszabo/home-assistant-flipper-bridge",
   "issue_tracker": "https://github.com/markszabo/home-assistant-flipper-bridge/issues",
   "codeowners": ["@markszabo"],
