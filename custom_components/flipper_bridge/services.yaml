@@ -1,8 +1,11 @@
 send_cli:
-  name: Send CLI command
+  name: Send CLI Command
   description: Send a CLI command to the connected Flipper Zero
   fields:
     command:
       name: Command
-      description: Flipper CLI command
-      example: "info device"
+      description: CLI command to send to Flipper Zero
+      example: "help"
+      required: true
+      selector:
+        text:

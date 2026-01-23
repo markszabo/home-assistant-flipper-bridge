@@ -2,9 +2,15 @@ import serial
 import logging
 import threading
 import time
+import re
 
 _LOGGER = logging.getLogger(__name__)
 
+ANSI_ESCAPE_RE = re.compile(r"\x1B\[[0-?]*[ -/]*[@-~]")
+
+# Remove color codes from the CLI output
+def strip_ansi(text: str) -> str:
+    return ANSI_ESCAPE_RE.sub("", text)
 
 class FlipperSerialClient:
     def __init__(self, port: str, baudrate: int):
@@ -29,16 +35,6 @@ class FlipperSerialClient:
         # === Flipper CLI wake-up sequence ===
         time.sleep(0.5)
 
-        # Send newline to wake CLI
-        self._ser.write(b"\n")
-        self._ser.flush()
-        time.sleep(0.2)
-
-        # Try Ctrl+C to break into CLI if needed
-        self._ser.write(b"\x03")
-        self._ser.flush()
-        time.sleep(0.2)
-
         # Clear any startup noise
         self._ser.reset_input_buffer()
         self._ser.reset_output_buffer()
@@ -59,7 +55,7 @@ class FlipperSerialClient:
             self._ser.reset_input_buffer()
             self._ser.reset_output_buffer()
 
-            cmd = command.strip() + "\n"
+            cmd = command.strip() + "\r\n"
             _LOGGER.debug("Sending CLI command: %s", cmd.strip())
             self._ser.write(cmd.encode())
             self._ser.flush()
@@ -85,6 +81,8 @@ class FlipperSerialClient:
                     time.sleep(0.2)
 
             response = "\n".join(response_lines)
+            response = strip_ansi(response)
+            response = response.replace("\r\n", "\n")
 
             if not response:
                 _LOGGER.warning(
