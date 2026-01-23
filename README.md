@@ -41,6 +41,8 @@ This makes it easy to integrate Flipper Zero into automations, scripts, and dash
 3. Select the Flipper serial port (e.g. `/dev/ttyACM0`)
 4. Set baud rate (default: `230400`)
 
+![Configuration screen](/img/config.png)
+
 ## ▶️ Usage
 
 ### Send a CLI command (Developer Tools)
@@ -53,6 +55,8 @@ This makes it easy to integrate Flipper Zero into automations, scripts, and dash
    ```
 3. Enter the command you want to run (e.g. `help`)
 4. See the response
+
+![Usage in developer tools](/img/developer_tools.png)
 
 ### Use in an automation
 
