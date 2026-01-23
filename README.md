@@ -1,7 +1,5 @@
 # Flipper Bridge
 
-![Flipper Bridge](custom_components/flipper_bridge/logo.png)
-
 **Flipper Bridge** is a Home Assistant custom integration that connects a **Flipper Zero** to Home Assistant via **USB serial** and allows you to send [Flipper CLI](https://docs.flipper.net/zero/development/cli) commands directly from Home Assistant.
 
 This makes it easy to integrate Flipper Zero into automations, scripts, and dashboards — for example, triggering IR, Sub-GHz, GPIO, or other Flipper CLI features from Home Assistant.
